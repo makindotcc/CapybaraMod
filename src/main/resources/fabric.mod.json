@@ -2,33 +2,30 @@
   "schemaVersion": 1,
   "id": "modid",
   "version": "${version}",
-
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "capybaragg",
+  "description": "Capybara mod.",
   "authors": [
-    "Me!"
+    "www_makin_cc",
+    "Oskar1239"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://www.makin.cc/"
   },
-
   "license": "CC0-1.0",
   "icon": "assets/modid/icon.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "gg.capybara.mod.CapybaraMod"
     ]
   },
   "mixins": [
     "modid.mixins.json"
   ],
-
   "depends": {
     "fabricloader": ">=0.14.9",
     "fabric-api": "*",
+    "fabric-command-api-v2": "*",
     "minecraft": "~1.19",
     "java": ">=17"
   },
