@@ -1,4 +1,4 @@
-package gg.capybara.mod.mixin.player;
+package gg.capybara.mod.mixin.optimization.player;
 
 import gg.capybara.mod.CapybaraMod;
 import net.minecraft.client.player.LocalPlayer;

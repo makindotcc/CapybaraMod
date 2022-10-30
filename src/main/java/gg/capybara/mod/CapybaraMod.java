@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CapybaraMod implements ModInitializer {
-    public static final Logger LOGGER = LoggerFactory.getLogger("CapybaraMod");
+    public static final Logger LOGGER = LoggerFactory.getLogger("CapybaraGG");
 
     @Override
     public void onInitialize() {
@@ -18,6 +18,5 @@ public class CapybaraMod implements ModInitializer {
                 return 0;
             }));
         });
-        LOGGER.info("Hello Fabric world!");
     }
 }
