@@ -25,6 +25,10 @@ public abstract class FontMixin {
     @Shadow
     public abstract int drawInBatch(FormattedCharSequence formattedCharSequence, float f, float g, int i, boolean bl, Matrix4f matrix4f, MultiBufferSource multiBufferSource, boolean bl2, int j, int k);
 
+    // todo:
+    // - memoizacja wszystkich argumentow
+    // - ignore jak tekst jest obfuscated &k
+    // - usuwac vbo jak nieaktywne
     @Overwrite
     private int drawInternal(FormattedCharSequence charSeq, float f, float g, int i, Matrix4f matrix4f, boolean bl) {
         Pair<FormattedCharSequence, Float> key = Pair.of(charSeq, g);
