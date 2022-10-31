@@ -5,12 +5,18 @@ import net.minecraft.client.renderer.RenderType;
 
 public class VertexCache {
     public final VertexBuffer vertexBuffer;
-    public final int returnValue;
+    public final int textWidth;
     public final RenderType renderType;
+    public final long timeoutAt;
 
-    public VertexCache(VertexBuffer vertexBuffer, int returnValue, RenderType renderType) {
+    public VertexCache(VertexBuffer vertexBuffer, int textWidth, RenderType renderType, long timeoutAt) {
         this.vertexBuffer = vertexBuffer;
-        this.returnValue = returnValue;
+        this.textWidth = textWidth;
         this.renderType = renderType;
+        this.timeoutAt = timeoutAt;
+    }
+
+    public boolean isDead() {
+        return System.currentTimeMillis() >= this.timeoutAt;
     }
 }

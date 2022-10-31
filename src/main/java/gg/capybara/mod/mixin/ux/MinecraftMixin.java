@@ -22,8 +22,8 @@ public abstract class MinecraftMixin {
             KeyMapping.setAll();
         }
 
-//        if (screen instanceof ReceivingLevelScreen || screen instanceof ProgressScreen) {
-//            this.setScreen(null);
-//        }
+        if (screen instanceof ReceivingLevelScreen || screen instanceof ProgressScreen) {
+            this.setScreen(null);
+        }
     }
 }
