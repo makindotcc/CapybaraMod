@@ -11,6 +11,7 @@
   "client": [
     "CapybaraBrandRetriever",
     "design.ReceivingLevelScreenMixin",
+    "optimization.client.gui.BufferSourceMixin",
     "optimization.client.gui.FontMixin",
     "optimization.client.gui.StringRenderOutputMixin",
     "optimization.multiplayer.ClientPacketListenerMixin",

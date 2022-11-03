@@ -1,6 +1,5 @@
 package gg.capybara.mod.mixin.optimization.client.gui;
 
-import com.mojang.blaze3d.vertex.BufferBuilder;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +11,4 @@ import java.util.Optional;
 public interface BufferSourceAccessor {
     @Accessor
     Optional<RenderType> getLastState();
-
-    @Accessor
-    BufferBuilder getBuilder();
 }
