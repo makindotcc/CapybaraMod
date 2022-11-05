@@ -7,36 +7,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 
-class FontRenderer {
-//    private val cachedDrawInternal = CacheBuilder.newBuilder()
-//        .expireAfterAccess(200, TimeUnit.MILLISECONDS)
-//        //        .removalListener((notification) -> {
-//        //            VertexCache cached = (VertexCache) notification.getValue();
-//        //            assert cached != null;
-//        //            cached.vertexBuffer.close();
-//        //        })
-//        .build<Any, TextCache>()
-
-//    fun draw(poseStack: PoseStack, text: String, x: Float, y: Float, color: Int): Int {
-//        val textCache = cachedDrawInternal.getIfPresent(text)
-//        if (textCache == null) {
-//            val bufferBuilder = Tesselator.getInstance().builder
-//            val bufferSource = MultiBufferSource.immediate(bufferBuilder)
-//
-//
-//            val textCache = TextCache(text)
-//            cachedDrawInternal.put(text, textCache)
-//            println("creating text cache for: $text")
-//        } else if (!textCache.established) {
-//            println("establishing text cache for: $text")
-//            textCache.established = true
-//        } else {
-//
-//        }
-//        return 0
-//    }
-}
-
 class FontBufferSource(
     private val bufferBuilder: BufferBuilder,
 ) : MultiBufferSource {
