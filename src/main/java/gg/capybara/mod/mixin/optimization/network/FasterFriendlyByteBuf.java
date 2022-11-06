@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(FriendlyByteBuf.class)
-public abstract class FriendlyByteBufMixin {
+public abstract class FasterFriendlyByteBuf {
     @Shadow
     public abstract int readVarInt();
 

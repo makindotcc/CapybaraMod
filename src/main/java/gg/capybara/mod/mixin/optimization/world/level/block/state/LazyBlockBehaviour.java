@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * Initialize block state cache lazy off renderer thread.
  */
 @Mixin(BlockBehaviour.BlockStateBase.class)
-public abstract class LazyBlockBehaviourMixin {
+public abstract class LazyBlockBehaviour {
     private boolean lazyInitCacheFired;
     private boolean invalidateCache = false;
 

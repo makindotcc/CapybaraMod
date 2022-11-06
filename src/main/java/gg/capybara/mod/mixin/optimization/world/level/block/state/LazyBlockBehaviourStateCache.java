@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * Initialize face sturdy cache lazy.
  */
 @Mixin(targets = "net.minecraft.world.level.block.state.BlockBehaviour$BlockStateBase$Cache")
-public abstract class LazyBlockBehaviourStateCacheMixin {
+public abstract class LazyBlockBehaviourStateCache {
     @Shadow
     @Final
     private boolean[] faceSturdy;

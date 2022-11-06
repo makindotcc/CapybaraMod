@@ -28,7 +28,7 @@ import java.util.function.Function;
  * Caches rendered text vertex buffer.
  */
 @Mixin(Font.class)
-public abstract class CachedFontMixin {
+public abstract class CachedFont {
     private static final long OBFUSCATED_FPS = 30;
 
     private final Cache<Object, FontCache> drawCache = CacheBuilder.newBuilder()

@@ -1,5 +1,6 @@
 package gg.capybara.mod.mixin.optimization.multiplayer;
 
+import gg.capybara.mod.CapybaraMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.searchtree.SearchRegistry;
@@ -15,7 +16,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Mixin(ClientPacketListener.class)
-public abstract class ClientPacketListenerMixin {
+public abstract class LazyClientPacketListener {
     private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     @Shadow
@@ -24,14 +25,14 @@ public abstract class ClientPacketListenerMixin {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Redirect(
-        method = "handleUpdateTags",
-        at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/Minecraft;populateSearchTree(" +
-                "Lnet/minecraft/client/searchtree/SearchRegistry$Key;Ljava/util/List;)V")
+            method = "handleUpdateTags",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/client/Minecraft;populateSearchTree(" +
+                            "Lnet/minecraft/client/searchtree/SearchRegistry$Key;Ljava/util/List;)V")
     )
     public void procrastinateCreativeSearchUpdate(Minecraft instance, SearchRegistry.Key key, List list) {
         // nei takie wazne ze musi kurwa byc w tym samym ticku aktualizowane co wejscie na serwa
-        System.out.println("procrastinateCreativeSearchUpdate: " + System.currentTimeMillis());
+        CapybaraMod.LOGGER.debug("procrastinateCreativeSearchUpdate: " + System.currentTimeMillis());
         this.runIn(() -> {
             this.minecraft.populateSearchTree(key, list);
         }, key == SearchRegistry.CREATIVE_NAMES ? 40 : 60);
@@ -39,14 +40,14 @@ public abstract class ClientPacketListenerMixin {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Redirect(
-        method = "handleUpdateRecipes",
-        at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/Minecraft;populateSearchTree(" +
-                "Lnet/minecraft/client/searchtree/SearchRegistry$Key;Ljava/util/List;)V")
+            method = "handleUpdateRecipes",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/client/Minecraft;populateSearchTree(" +
+                            "Lnet/minecraft/client/searchtree/SearchRegistry$Key;Ljava/util/List;)V")
     )
     public void procrastinateRecipesSearchUpdate(Minecraft instance, SearchRegistry.Key key, List list) {
         // nei takie wazne ze musi kurwa byc w tym samym ticku aktualizowane co wejscie na serwa
-        System.out.println("procrastinateRecipesSearchUpdate: " + System.currentTimeMillis());
+        CapybaraMod.LOGGER.debug("procrastinateRecipesSearchUpdate: " + System.currentTimeMillis());
         this.runIn(() -> {
             this.minecraft.populateSearchTree(key, list);
         }, 20);
@@ -55,10 +56,7 @@ public abstract class ClientPacketListenerMixin {
     // todo scheduler bo nie ma kurwa w tej grze
     private void runIn(Runnable runnable, int ticks) {
         executor.schedule(() -> {
-            Minecraft.getInstance().tell(() -> {
-                System.out.println("running: " + System.currentTimeMillis());
-                runnable.run();
-            });
+            Minecraft.getInstance().tell(runnable::run);
         }, ticks * 50L, TimeUnit.MILLISECONDS);
     }
 }

@@ -4,21 +4,21 @@
   "package": "gg.capybara.mod.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "optimization.network.FriendlyByteBufMixin",
-    "optimization.world.level.block.state.LazyBlockBehaviourMixin",
-    "render.GameRendererMixin"
+    "optimization.network.FasterFriendlyByteBuf",
+    "optimization.world.level.block.state.LazyBlockBehaviour",
+    "optimization.world.level.block.state.LazyBlockBehaviourStateCache",
+    "render.CapyShadersLoader"
   ],
   "client": [
     "CapybaraBrandRetriever",
     "MinecraftAccessor",
     "design.CleanerReceivingLevelScreen",
     "event.GuiHook",
-    "optimization.client.gui.CachedFontMixin",
-    "optimization.multiplayer.ClientPacketListenerMixin",
-    "optimization.player.LocalPlayerMixin",
+    "optimization.client.gui.CachedFont",
+    "optimization.multiplayer.LazyClientPacketListener",
     "ux.FasterReceivingLevelScreen",
-    "ux.MinecraftMixin",
-    "ux.MouseHandlerMixin"
+    "ux.MacosKeyMappingFix",
+    "ux.StealCursorInLoadingScreens"
   ],
   "injectors": {
     "defaultRequire": 1

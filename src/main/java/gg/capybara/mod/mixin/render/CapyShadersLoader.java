@@ -18,18 +18,17 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Mixin(GameRenderer.class)
-public class GameRendererMixin {
+public class CapyShadersLoader {
     @Inject(
-        method = "reloadShaders",
-        at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0),
-        locals = LocalCapture.CAPTURE_FAILHARD
+            method = "reloadShaders",
+            at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0),
+            locals = LocalCapture.CAPTURE_FAILHARD
     )
     public void addCapyShaders(ResourceManager resourceManager, CallbackInfo ci,
-        List<Program> ignored, List<Pair<ShaderInstance, Consumer<ShaderInstance>>> shaders
+            List<Program> ignored, List<Pair<ShaderInstance, Consumer<ShaderInstance>>> shaders
     ) throws IOException {
-        System.out.println("ESSSSSA");
         ShaderInstance logoText = new ShaderInstance(resourceManager, "capybara_logo",
-            DefaultVertexFormat.POSITION_TEX);
+                DefaultVertexFormat.POSITION_TEX);
         shaders.add(Pair.of(logoText, CapyShaders.INSTANCE::setRendertypeLogoText));
     }
 }
