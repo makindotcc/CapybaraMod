@@ -11,11 +11,12 @@
   "client": [
     "CapybaraBrandRetriever",
     "MinecraftAccessor",
-    "design.ReceivingLevelScreenMixin",
+    "design.CleanerReceivingLevelScreen",
     "event.GuiHook",
     "optimization.client.gui.CachedFontMixin",
     "optimization.multiplayer.ClientPacketListenerMixin",
     "optimization.player.LocalPlayerMixin",
+    "ux.FasterReceivingLevelScreen",
     "ux.MinecraftMixin",
     "ux.MouseHandlerMixin"
   ],

@@ -8,10 +8,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(ReceivingLevelScreen.class)
-public abstract class ReceivingLevelScreenMixin extends Screen {
+public abstract class CleanerReceivingLevelScreen extends Screen {
     private static final Component DOWNLOADING_TERRAIN_TEXT = Component.translatable("multiplayer.downloadingTerrain");
 
-    protected ReceivingLevelScreenMixin(Component component) {
+    protected CleanerReceivingLevelScreen(Component component) {
         super(component);
     }
 
