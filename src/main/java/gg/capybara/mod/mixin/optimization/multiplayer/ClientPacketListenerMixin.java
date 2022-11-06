@@ -10,21 +10,19 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Mixin(ClientPacketListener.class)
 public abstract class ClientPacketListenerMixin {
-    private static ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     @Shadow
     @Final
     private Minecraft minecraft;
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Redirect(
         method = "handleUpdateTags",
         at = @At(value = "INVOKE",
@@ -39,7 +37,7 @@ public abstract class ClientPacketListenerMixin {
         }, key == SearchRegistry.CREATIVE_NAMES ? 40 : 60);
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Redirect(
         method = "handleUpdateRecipes",
         at = @At(value = "INVOKE",

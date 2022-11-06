@@ -1,5 +1,6 @@
 package gg.capybara.mod;
 
+import gg.capybara.mod.event.HudRenderCallback;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -18,5 +19,8 @@ public class CapybaraMod implements ModInitializer {
                 return 0;
             }));
         });
+
+        CapybaraHud hud = new CapybaraHud();
+        HudRenderCallback.EVENT.register(hud::render);
     }
 }

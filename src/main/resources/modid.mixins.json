@@ -5,11 +5,14 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "optimization.network.FriendlyByteBufMixin",
-    "optimization.world.level.block.state.LazyBlockBehaviourMixin"
+    "optimization.world.level.block.state.LazyBlockBehaviourMixin",
+    "render.GameRendererMixin"
   ],
   "client": [
     "CapybaraBrandRetriever",
+    "MinecraftAccessor",
     "design.ReceivingLevelScreenMixin",
+    "event.GuiHook",
     "optimization.client.gui.CachedFontMixin",
     "optimization.multiplayer.ClientPacketListenerMixin",
     "optimization.player.LocalPlayerMixin",

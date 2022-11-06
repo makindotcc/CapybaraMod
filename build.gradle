@@ -63,6 +63,7 @@ jar {
 }
 
 runClient {
+	jvmArgs("-Dmixin.debug.export=true")
 	args("--width=1280", "--height=720")
 	args("--username=www_makln_cc")
 }

@@ -16,12 +16,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MinecraftMixin {
     @Shadow public abstract void setScreen(@Nullable Screen screen);
 
-    @Inject(at = @At("TAIL"), method = "setScreen", cancellable = true)
+    @Inject(at = @At("TAIL"), method = "setScreen")
     public void setScreen(Screen screen, CallbackInfo ci) {
         if (screen == null && Minecraft.ON_OSX) {
             KeyMapping.setAll();
         }
 
+        // TODO: TO JEST ZLE !
+        // bo nie pozwala nam zresetowac stanu inputu typu ze sprintujemy
+        // i na nastepnym serwerze anticheat moze nas porwac
         if (screen instanceof ReceivingLevelScreen || screen instanceof ProgressScreen) {
             this.setScreen(null);
         }
