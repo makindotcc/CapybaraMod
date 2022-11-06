@@ -27,4 +27,4 @@ void main() {
 
     float hue = (cos(GameTime * SPEED + texCoord0.x + texCoord0.y * STRETCH) + 1) / 12 + 0.66;
     fragColor = vec4(hsv2rgb(vec3(hue, sv)), color.a);
-t}
+}
