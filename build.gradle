@@ -65,7 +65,7 @@ jar {
 runClient {
 	jvmArgs("-Dmixin.debug.export=true", "-XX:+AllowEnhancedClassRedefinition")
 	args("--width=1280", "--height=720")
-	args("--username=www_makln_cc")
+	args("--username=${System.getenv('CAPY_DEV_NAME') ?: 'www_makln_cc'}")
 }
 
 // configure the maven publication
