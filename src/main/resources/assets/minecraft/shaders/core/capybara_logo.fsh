@@ -1,8 +1,5 @@
 #version 150
 
-#define SPEED 1000
-#define STRETCH 1
-
 uniform sampler2D Sampler0;
 uniform float ProgramTime;
 
@@ -21,27 +18,21 @@ void main() {
         discard;
     }
 
-    float time = ProgramTime;
-    vec2 uv = texCoord0.xy * 8.0;
-    vec2 uv0 = uv;
-    float i0=1.0;
-    float i1=1.0;
-    float i2=1.0;
-    float i4=0.0;
-    for (int s=0;s<7;s++)
-    {
-        vec2 r;
-        r=vec2(cos(uv.y*i0-i4+time/i1), sin(uv.x*i0-i4+time/i1))/i2;
-        r+=vec2(-r.y, r.x)*0.3;
-        uv.xy+=r;
+    float strength = 0.3;
+    float t = ProgramTime / 3.0;
 
-        i0*=1.93;
-        i1*=1.15;
-        i2*=1.7;
-        i4+=0.05+0.1*time*i1;
+    vec3 col = vec3(0);
+    vec2 pos = 4.0 * (vec2(0.5) - texCoord0);
+
+    for(float k = 1.0; k < 7.0; k+=1.0){
+        pos.x += strength * sin(2.0 * t + k * 1.5 * pos.y) + t * 0.5;
+        pos.y += strength * cos(2.0 * t + k * 1.5 * pos.x);
     }
-    float r=sin(uv.x-time)*0.2+0.7;
-    float b=sin(uv.y+time)*0.2+0.7;
-    float g=sin((uv.x+uv.y+sin(time*0.3))*0.5)*0.5+0.5;
-    fragColor = vec4(r, g, b, color.a);
+
+    //Time varying pixel color
+    col += 0.5 + 0.5 * cos(ProgramTime + pos.xyx + vec3(0,2,4));
+    //Gamma
+    col = pow(col, vec3(0.4545));
+    //Fragment color
+    fragColor = vec4(col,color.a);
 }
