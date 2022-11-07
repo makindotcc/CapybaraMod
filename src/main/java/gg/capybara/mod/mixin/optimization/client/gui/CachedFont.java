@@ -118,7 +118,7 @@ public abstract class CachedFont {
         Matrix4f previousModelViewMatrix = modelViewMatrix.copy();
         applyTranslation(x, y, translation, modelViewMatrix);
 
-        int textWidth = drawText.apply(bufferSource);
+        int textWidth = (int) (x + drawText.apply(bufferSource));
         List<Pair<RenderType, VertexBuffer>> vboList = bufferSource.endBatch();
 
         modelViewMatrix.load(previousModelViewMatrix);
