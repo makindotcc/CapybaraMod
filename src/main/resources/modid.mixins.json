@@ -4,12 +4,13 @@
   "package": "gg.capybara.mod.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "blaze3d.vertex.MixinVertexBuffer",
     "optimization.network.FasterFriendlyByteBuf",
+    "optimization.network.chat.CachedStyle",
     "optimization.world.level.block.state.LazyBlockBehaviour",
     "optimization.world.level.block.state.LazyBlockBehaviourStateCache",
-    "render.CapyShadersLoader",
     "render.CapyShaderInstance",
-    "blaze3d.vertex.MixinVertexBuffer"
+    "render.CapyShadersLoader"
   ],
   "client": [
     "CapybaraBrandRetriever",
@@ -17,6 +18,7 @@
     "design.CleanerReceivingLevelScreen",
     "event.GuiHook",
     "optimization.client.gui.CachedFont",
+    "optimization.client.renderer.entity.CachedEntityRenderer",
     "optimization.multiplayer.LazyClientPacketListener",
     "ux.FasterReceivingLevelScreen",
     "ux.MacosKeyMappingFix",

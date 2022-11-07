@@ -24,7 +24,7 @@ public abstract class CachedEntityRenderer {
     public abstract Font getFont();
 
     @Overwrite
-    protected void renderNameTag(Entity entity, Component component, PoseStack poseStack,
+    public void renderNameTag(Entity entity, Component component, PoseStack poseStack,
             MultiBufferSource multiBufferSource, int i) {
         double d = this.entityRenderDispatcher.distanceToSqr(entity);
         if (!(d > 4096.0)) {
@@ -35,7 +35,7 @@ public abstract class CachedEntityRenderer {
             poseStack.translate(0.0, posY, 0.0);
             poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
             poseStack.scale(-0.025F, -0.025F, 0.025F);
-//            Matrix4f matrix4f = poseStack.last().pose();
+            Matrix4f matrix4f = poseStack.last().pose();
             float opacity = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
             int backgroundColor = (int) (opacity * 255.0F) << 24;
             Font font = this.getFont();
