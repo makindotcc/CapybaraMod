@@ -7,7 +7,9 @@
     "optimization.network.FasterFriendlyByteBuf",
     "optimization.world.level.block.state.LazyBlockBehaviour",
     "optimization.world.level.block.state.LazyBlockBehaviourStateCache",
-    "render.CapyShadersLoader"
+    "render.CapyShadersLoader",
+    "render.CapyShaderInstance",
+    "blaze3d.vertex.MixinVertexBuffer"
   ],
   "client": [
     "CapybaraBrandRetriever",

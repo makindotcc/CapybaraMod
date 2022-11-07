@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "capybaragg",
   "version": "${version}",
   "name": "capybaragg",
   "description": "Capybara mod.",
   "authors": [
     "www_makin_cc",
-    "Oskar1239"
+    "dr3fty"
   ],
   "contact": {
     "homepage": "https://www.makin.cc/"

@@ -5,7 +5,7 @@ in vec2 UV0;
 
 uniform mat4 ModelViewMat;
 uniform mat4 ProjMat;
-uniform float GameTime;
+uniform float ProgramTime;
 
 out vec2 texCoord0;
 

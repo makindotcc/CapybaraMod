@@ -1,11 +1,10 @@
 #version 150
 
-#define SPEED 2000
+#define SPEED 1000
 #define STRETCH 1
 
 uniform sampler2D Sampler0;
-uniform vec4 ColorModulator;
-uniform float GameTime;
+uniform float ProgramTime;
 
 in vec2 texCoord0;
 out vec4 fragColor;
@@ -21,10 +20,28 @@ void main() {
     if (color.a == 0.0) {
         discard;
     }
-    fragColor = color * ColorModulator;
 
- 	vec2 sv = vec2(0.5, 0.9);
+    float time = ProgramTime;
+    vec2 uv = texCoord0.xy * 8.0;
+    vec2 uv0 = uv;
+    float i0=1.0;
+    float i1=1.0;
+    float i2=1.0;
+    float i4=0.0;
+    for (int s=0;s<7;s++)
+    {
+        vec2 r;
+        r=vec2(cos(uv.y*i0-i4+time/i1), sin(uv.x*i0-i4+time/i1))/i2;
+        r+=vec2(-r.y, r.x)*0.3;
+        uv.xy+=r;
 
-    float hue = (cos(GameTime * SPEED + texCoord0.x + texCoord0.y * STRETCH) + 1) / 12 + 0.66;
-    fragColor = vec4(hsv2rgb(vec3(hue, sv)), color.a);
+        i0*=1.93;
+        i1*=1.15;
+        i2*=1.7;
+        i4+=0.05+0.1*time*i1;
+    }
+    float r=sin(uv.x-time)*0.2+0.7;
+    float b=sin(uv.y+time)*0.2+0.7;
+    float g=sin((uv.x+uv.y+sin(time*0.3))*0.5)*0.5+0.5;
+    fragColor = vec4(r, g, b, color.a);
 }
