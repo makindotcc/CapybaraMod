@@ -63,7 +63,7 @@ jar {
 }
 
 runClient {
-	jvmArgs("-Dmixin.debug.export=true")
+	jvmArgs("-Dmixin.debug.export=true", "-XX:+AllowEnhancedClassRedefinition")
 	args("--width=1280", "--height=720")
 	args("--username=www_makln_cc")
 }
