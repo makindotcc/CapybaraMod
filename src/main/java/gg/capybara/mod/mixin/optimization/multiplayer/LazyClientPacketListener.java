@@ -56,7 +56,7 @@ public abstract class LazyClientPacketListener {
     // todo scheduler bo nie ma kurwa w tej grze
     private void runIn(Runnable runnable, int ticks) {
         executor.schedule(() -> {
-            Minecraft.getInstance().tell(runnable::run);
+            Minecraft.getInstance().tell(runnable);
         }, ticks * 50L, TimeUnit.MILLISECONDS);
     }
 }
