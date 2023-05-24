@@ -13,15 +13,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MouseHandler.class)
 public class StealCursorInLoadingScreens {
-    @Shadow
-    private boolean mouseGrabbed;
-
     @Inject(at = @At("HEAD"), method = "releaseMouse", cancellable = true)
     public void stealCursor(CallbackInfo ci) {
         Screen screen = Minecraft.getInstance().screen;
         if (screen instanceof ReceivingLevelScreen || screen instanceof ProgressScreen) {
             ci.cancel();
-            this.mouseGrabbed = false;
         }
     }
 }
