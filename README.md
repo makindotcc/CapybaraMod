@@ -14,6 +14,8 @@ Before that, while holding "W" on world switch you have to release and press it 
 - [x] Initialize block state face sturdy (WHATEVER it is) lazily (also helps to reduce stutter on world switch)
 - [x] Force block behaviour cache to be initialized in any other thread that rendering.
 - [x] Cleaner (transparent) receiving level (world/terrain) screen.
+- [x] Replace "Fabric" brand message sent to server with "vanilla" one - some servers cry about it, because
+they think it will help prevent joining cheaters using fabric based cheats 🤣💀
 - [ ] ~~Don't render HUD every frame~~ - https://github.com/tr7zw/Exordium
 - [ ] Cache entities VBO - no need to recalculate entities geometry every frame.
 - [ ] (in progress) Cache entities name tags text.
