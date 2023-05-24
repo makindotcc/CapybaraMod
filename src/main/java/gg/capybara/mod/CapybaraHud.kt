@@ -6,14 +6,19 @@ import gg.capybara.mod.render.CapyShaders
 import gg.capybara.mod.render.Drawing
 import net.minecraft.client.Minecraft
 import net.minecraft.resources.ResourceLocation
+import java.util.concurrent.atomic.AtomicBoolean
 
-class CapybaraHud {
+class CapybaraHud(
+    private val watermarkEnabled: AtomicBoolean,
+) {
     fun render(matrixStack: PoseStack, delta: Float) {
         val minecraft = Minecraft.getInstance()
         if (minecraft.options.renderDebug) {
             return
         }
-        renderWatermark(matrixStack)
+        if (watermarkEnabled.get()) {
+            renderWatermark(matrixStack)
+        }
     }
 
     private fun renderWatermark(matrixStack: PoseStack) {
