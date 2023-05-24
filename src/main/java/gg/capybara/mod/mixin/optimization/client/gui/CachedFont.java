@@ -5,7 +5,6 @@ import com.google.common.cache.CacheBuilder;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
-import com.mojang.math.Matrix4f;
 import gg.capybara.mod.optimization.font.CharSeqHashCodeCalculator;
 import gg.capybara.mod.optimization.font.FontBufferSource;
 import gg.capybara.mod.optimization.font.FontCache;
@@ -15,6 +14,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -46,13 +46,13 @@ public abstract class CachedFont {
 
     @Shadow
     public abstract int drawInBatch(String string, float f, float g, int i, boolean bl, Matrix4f matrix4f,
-            MultiBufferSource multiBufferSource, boolean bl2, int j, int k, boolean bl3);
+            MultiBufferSource multiBufferSource, Font.DisplayMode displayMode, int j, int k, boolean bl2);
 
     @Shadow
-    public abstract int drawInBatch(FormattedCharSequence formattedCharSequence, float f, float g, int i,
-            boolean bl, Matrix4f matrix4f, MultiBufferSource multiBufferSource, boolean bl2, int j, int k);
+    public abstract int drawInBatch(FormattedCharSequence formattedCharSequence, float f, float g, int i, boolean bl,
+            Matrix4f matrix4f, MultiBufferSource multiBufferSource, Font.DisplayMode displayMode, int j, int k);
 
-    @Inject(method = "drawInternal(Ljava/lang/String;FFILcom/mojang/math/Matrix4f;ZZ)I", at = @At("HEAD"),
+    @Inject(method = "drawInternal(Ljava/lang/String;FFILorg/joml/Matrix4f;ZZ)I", at = @At("HEAD"),
             cancellable = true)
     private void drawCached(String text, float x, float y, int color, Matrix4f translation,
             boolean shadow, boolean rightToLeft, CallbackInfoReturnable<Integer> cir
@@ -67,8 +67,8 @@ public abstract class CachedFont {
             this.drawCache.put(cacheKey, FontCache.TooYoung.INSTANCE);
         } else if (fontCache instanceof FontCache.TooYoung) {
             Function<FontBufferSource, Integer> draw = (bufferSource) ->
-                    this.drawInBatch(text, 0, 0, color, shadow, Matrix4f.createScaleMatrix(1f, 1f, 1f),
-                            bufferSource, false, 0, 0xF000F0, rightToLeft);
+                    this.drawInBatch(text, 0, 0, color, shadow, new Matrix4f(),
+                            bufferSource, Font.DisplayMode.NORMAL, 0, 0xF000F0, rightToLeft);
             FontCache.Established established = establishCache(x, y, Long.MAX_VALUE, translation, draw);
             this.drawCache.put(cacheKey, established);
             cir.setReturnValue(established.getTextWidth());
@@ -78,7 +78,7 @@ public abstract class CachedFont {
         }
     }
 
-    @Inject(method = "drawInternal(Lnet/minecraft/util/FormattedCharSequence;FFILcom/mojang/math/Matrix4f;Z)I",
+    @Inject(method = "drawInternal(Lnet/minecraft/util/FormattedCharSequence;FFILorg/joml/Matrix4f;Z)I",
             at = @At("HEAD"), cancellable = true)
     public void drawCached(FormattedCharSequence text, float x, float y, int color, Matrix4f translation,
             boolean shadow, CallbackInfoReturnable<Integer> cir
@@ -93,8 +93,8 @@ public abstract class CachedFont {
                     :
                     Long.MAX_VALUE;
             Function<FontBufferSource, Integer> draw = (bufferSource) ->
-                    this.drawInBatch(text, 0, 0, color, shadow, Matrix4f.createScaleMatrix(1f, 1f, 1f),
-                            bufferSource, false, 0, 0xF000F0);
+                    this.drawInBatch(text, 0, 0, color, shadow, new Matrix4f(),
+                            bufferSource, Font.DisplayMode.NORMAL, 0, 0xF000F0);
             FontCache.Established established = establishCache(x, y, timeoutAt, translation, draw);
             this.drawCache.put(cacheKey, established);
             cir.setReturnValue(established.getTextWidth());
@@ -115,13 +115,13 @@ public abstract class CachedFont {
         FontBufferSource bufferSource = new FontBufferSource(Tesselator.getInstance().getBuilder());
 
         Matrix4f modelViewMatrix = RenderSystem.getModelViewMatrix();
-        Matrix4f previousModelViewMatrix = modelViewMatrix.copy();
+        Matrix4f previousModelViewMatrix = new Matrix4f(modelViewMatrix);
         applyTranslation(x, y, translation, modelViewMatrix);
 
         int textWidth = (int) (x + drawText.apply(bufferSource));
         List<Pair<RenderType, VertexBuffer>> vboList = bufferSource.endBatch();
 
-        modelViewMatrix.load(previousModelViewMatrix);
+        modelViewMatrix.set(previousModelViewMatrix);
         return new FontCache.Established(vboList, textWidth, timeoutAt);
     }
 
@@ -130,7 +130,7 @@ public abstract class CachedFont {
     ) {
         Matrix4f modelViewMatrix = RenderSystem.getModelViewMatrix();
         Matrix4f projectionMatrix = RenderSystem.getProjectionMatrix();
-        Matrix4f previousModelViewMatrix = modelViewMatrix.copy();
+        Matrix4f previousModelViewMatrix = new Matrix4f(modelViewMatrix);
         applyTranslation(x, y, translation, modelViewMatrix);
 
         for (Pair<RenderType, VertexBuffer> entry : established.getVbo()) {
@@ -143,7 +143,7 @@ public abstract class CachedFont {
             renderType.clearRenderState();
         }
 
-        modelViewMatrix.load(previousModelViewMatrix);
+        modelViewMatrix.set(previousModelViewMatrix);
     }
 
     private static boolean isObfuscated(FormattedCharSequence text) {
@@ -151,8 +151,8 @@ public abstract class CachedFont {
     }
 
     private static void applyTranslation(float x, float y, Matrix4f matrix4f, Matrix4f modelViewMatrix) {
-        Matrix4f translation = matrix4f.copy();
-        translation.multiply(Matrix4f.createTranslateMatrix(x, y, 0f));
-        modelViewMatrix.multiply(translation);
+        Matrix4f translation = new Matrix4f(matrix4f);
+        translation.mul(new Matrix4f().translate(x, y, 0f));
+        modelViewMatrix.mul(translation);
     }
 }

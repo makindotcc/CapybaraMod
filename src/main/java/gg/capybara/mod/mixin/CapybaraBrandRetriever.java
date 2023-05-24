@@ -7,6 +7,10 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(ClientBrandRetriever.class)
 public class CapybaraBrandRetriever {
+    /**
+     * @author www_makin_cc
+     * @reason To be removed.
+     */
     @DontObfuscate
     @Overwrite(remap = false)
     public static String getClientModName() {

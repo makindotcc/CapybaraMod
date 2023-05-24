@@ -1,7 +1,6 @@
 package gg.capybara.mod.mixin.optimization.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -9,6 +8,7 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -23,6 +23,10 @@ public abstract class CachedEntityRenderer {
     @Shadow
     public abstract Font getFont();
 
+    /**
+     * @author www_makin_cc
+     * @reason Optimize nametag rendering.
+     */
     @Overwrite
     public void renderNameTag(Entity entity, Component component, PoseStack poseStack,
             MultiBufferSource multiBufferSource, int i) {

@@ -2,7 +2,7 @@ package gg.capybara.mod.mixin.blaze3d.vertex;
 
 import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.vertex.VertexBuffer;
-import com.mojang.math.Matrix4f;
+import org.joml.Matrix4f;
 import gg.capybara.mod.render.ShaderInstanceExt;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.ShaderInstance;

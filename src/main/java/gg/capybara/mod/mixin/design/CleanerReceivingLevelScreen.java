@@ -15,6 +15,10 @@ public abstract class CleanerReceivingLevelScreen extends Screen {
         super(component);
     }
 
+    /**
+     * @author www_makin_cc
+     * @reason Default receiving screen is ugly as hell.
+     */
     @Overwrite
     public void render(PoseStack poseStack, int i, int j, float f) {
         this.renderBackground(poseStack);

@@ -35,6 +35,10 @@ public abstract class LazyBlockBehaviourStateCache {
     @Final
     private static Direction[] DIRECTIONS;
 
+    /**
+     * @author www_makin_cc
+     * @reason Initialization of face sturdy lazily.
+     */
     @Overwrite
     public boolean isFaceSturdy(Direction direction, SupportType supportType) {
         if (initializeFaceSturdy != null) {

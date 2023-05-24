@@ -14,14 +14,16 @@ public abstract class FasterFriendlyByteBuf {
     @Shadow
     public abstract int readVarInt();
 
-    @Shadow public abstract ByteBuf readBytes(byte[] bs);
+    @Shadow
+    public abstract ByteBuf readBytes(byte[] bs);
 
     /**
-     * Optimize readLongArray by reading whole byte array once instead of
+     * @author www_makin_cc
+     * @reason Optimize readLongArray by reading whole byte array once instead of
      * reading entry by entry (readLong() in for loop).
      */
     @Overwrite
-    public long[] readLongArray(@Nullable long[] ls, int i) {
+    public long[] readLongArray(long @Nullable [] ls, int i) {
         int j = this.readVarInt();
         if (ls == null || ls.length != j) {
             if (j > i) {
@@ -38,8 +40,8 @@ public abstract class FasterFriendlyByteBuf {
             for (int k = 0; k < ls.length; ++k) {
                 int offset = k * 8;
                 ls[k] = Longs.fromBytes(longsRaw[offset], longsRaw[offset + 1], longsRaw[offset + 2],
-                    longsRaw[offset + 3], longsRaw[offset + 4], longsRaw[offset + 5], longsRaw[offset + 6],
-                    longsRaw[offset + 7]);
+                        longsRaw[offset + 3], longsRaw[offset + 4], longsRaw[offset + 5], longsRaw[offset + 6],
+                        longsRaw[offset + 7]);
             }
         }
         return ls;

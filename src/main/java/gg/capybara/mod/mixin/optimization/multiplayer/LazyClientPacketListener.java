@@ -4,6 +4,8 @@ import gg.capybara.mod.CapybaraMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.searchtree.SearchRegistry;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,19 +25,17 @@ public abstract class LazyClientPacketListener {
     @Final
     private Minecraft minecraft;
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
     @Redirect(
             method = "handleUpdateTags",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/Minecraft;populateSearchTree(" +
-                            "Lnet/minecraft/client/searchtree/SearchRegistry$Key;Ljava/util/List;)V")
+                    target = "Lnet/minecraft/world/item/CreativeModeTab;rebuildSearchTree()V")
     )
-    public void procrastinateCreativeSearchUpdate(Minecraft instance, SearchRegistry.Key key, List list) {
+    public void procrastinateCreativeSearchUpdate(CreativeModeTab instance) {
         // nei takie wazne ze musi kurwa byc w tym samym ticku aktualizowane co wejscie na serwa
         CapybaraMod.LOGGER.debug("procrastinateCreativeSearchUpdate: " + System.currentTimeMillis());
         this.runIn(() -> {
-            this.minecraft.populateSearchTree(key, list);
-        }, key == SearchRegistry.CREATIVE_NAMES ? 40 : 60);
+            CreativeModeTabs.searchTab().rebuildSearchTree();
+        }, 40);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})

@@ -6,7 +6,7 @@ import com.mojang.datafixers.util.Pair;
 import gg.capybara.mod.render.CapyShaders;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,10 +24,10 @@ public class CapyShadersLoader {
             at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0),
             locals = LocalCapture.CAPTURE_FAILHARD
     )
-    public void addCapyShaders(ResourceManager resourceManager, CallbackInfo ci,
+    public void addCapyShaders(ResourceProvider resourceProvider, CallbackInfo ci,
             List<Program> ignored, List<Pair<ShaderInstance, Consumer<ShaderInstance>>> shaders
     ) throws IOException {
-        ShaderInstance logoText = new ShaderInstance(resourceManager, "capybara_logo",
+        ShaderInstance logoText = new ShaderInstance(resourceProvider, "capybara_logo",
                 DefaultVertexFormat.POSITION_TEX);
         shaders.add(Pair.of(logoText, CapyShaders.INSTANCE::setRendertypeLogoText));
     }
