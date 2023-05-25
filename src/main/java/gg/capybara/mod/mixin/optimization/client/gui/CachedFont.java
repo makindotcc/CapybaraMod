@@ -2,6 +2,7 @@ package gg.capybara.mod.mixin.optimization.client.gui;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
@@ -30,7 +31,7 @@ import java.util.function.Function;
  */
 @Mixin(Font.class)
 public abstract class CachedFont {
-    private static final long OBFUSCATED_FPS = 30;
+    private static final long OBFUSCATED_FPS = 60;
 
     private final Cache<Object, FontCache> drawCache = CacheBuilder.newBuilder()
             .expireAfterAccess(500, TimeUnit.MILLISECONDS)
@@ -66,7 +67,7 @@ public abstract class CachedFont {
         if (fontCache == null) {
             this.drawCache.put(cacheKey, FontCache.TooYoung.INSTANCE);
         } else if (fontCache instanceof FontCache.TooYoung) {
-            Function<FontBufferSource, Integer> draw = (bufferSource) ->
+            Function<MultiBufferSource, Integer> draw = (bufferSource) ->
                     this.drawInBatch(text, 0, 0, color, shadow, new Matrix4f(),
                             bufferSource, Font.DisplayMode.NORMAL, 0, 0xF000F0, rightToLeft);
             FontCache.Established established = establishCache(x, y, Long.MAX_VALUE, translation, draw);
@@ -92,7 +93,7 @@ public abstract class CachedFont {
                     System.currentTimeMillis() + (1000 / OBFUSCATED_FPS)
                     :
                     Long.MAX_VALUE;
-            Function<FontBufferSource, Integer> draw = (bufferSource) ->
+            Function<MultiBufferSource, Integer> draw = (bufferSource) ->
                     this.drawInBatch(text, 0, 0, color, shadow, new Matrix4f(),
                             bufferSource, Font.DisplayMode.NORMAL, 0, 0xF000F0);
             FontCache.Established established = establishCache(x, y, timeoutAt, translation, draw);
@@ -110,9 +111,10 @@ public abstract class CachedFont {
     }
 
     private static FontCache.Established establishCache(float x, float y, long timeoutAt, Matrix4f translation,
-            Function<FontBufferSource, Integer> drawText
+            Function<MultiBufferSource, Integer> drawText
     ) {
-        FontBufferSource bufferSource = new FontBufferSource(Tesselator.getInstance().getBuilder());
+        FontBufferSource bufferSource = new FontBufferSource(Tesselator.getInstance().getBuilder(),
+                ImmutableMap.of());
 
         Matrix4f modelViewMatrix = RenderSystem.getModelViewMatrix();
         Matrix4f previousModelViewMatrix = new Matrix4f(modelViewMatrix);
