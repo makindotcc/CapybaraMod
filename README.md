@@ -1,7 +1,7 @@
 **Experimental** Minecraft Fabric mod created with mind of improving performance of Minecraft.
 
 Goals:
-- [x] Improve font rendering - no need to recalculate them every frame.
+- [ ] (in progress) Improve font rendering - no need to recalculate them every frame
 - [x] Optimize packet with array of longs decoding ([FasterFriendlyByteBuf.java](src%2Fmain%2Fjava%2Fgg%2Fcapybara%2Fmod%2Fmixin%2Foptimization%2Fnetwork%2FFasterFriendlyByteBuf.java))
 - [x] Lazy recipies & creative search update after server switch (HELPS to reduce stutter on server switch a lot 
 on multi-server networks using proxy like Bungee/Velocity) \
