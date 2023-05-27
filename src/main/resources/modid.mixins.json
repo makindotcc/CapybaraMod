@@ -17,9 +17,11 @@
     "MinecraftAccessor",
     "design.CleanerReceivingLevelScreen",
     "event.GuiHook",
-    "optimization.renderer.CachedFont",
-    "optimization.renderer.CachedEntityRenderer",
     "optimization.network.LazyClientPacketListener",
+    "optimization.renderer.CachedEntityRenderer",
+    "optimization.renderer.CachedFont",
+    "optimization.renderer.CachedLevelRendererMixin",
+    "optimization.renderer.MultiBufferSourceAccessor",
     "ux.FasterReceivingLevelScreen",
     "ux.MacosKeyMappingFix",
     "ux.StealCursorInLoadingScreens"

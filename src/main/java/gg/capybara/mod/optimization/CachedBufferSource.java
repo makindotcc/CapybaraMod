@@ -1,4 +1,4 @@
-package gg.capybara.mod.optimization.font;
+package gg.capybara.mod.optimization;
 
 import com.google.common.collect.Sets;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -17,14 +17,14 @@ import java.util.*;
  * Fork of {@link MultiBufferSource.BufferSource}.
  * Renders to newly created {@link VertexBuffer} and saves them in {@link #buffers}.
  */
-public class FontBufferSource implements MultiBufferSource {
+public class CachedBufferSource implements MultiBufferSource {
     protected final BufferBuilder builder;
     protected final Map<RenderType, BufferBuilder> fixedBuffers;
     protected Optional<RenderType> lastState = Optional.empty();
     protected final Set<BufferBuilder> startedBuffers = Sets.newHashSet();
     private final List<Pair<RenderType, VertexBuffer>> buffers = new ArrayList<>();
 
-    public FontBufferSource(BufferBuilder bufferBuilder, Map<RenderType, BufferBuilder> map) {
+    public CachedBufferSource(BufferBuilder bufferBuilder, Map<RenderType, BufferBuilder> map) {
         this.builder = bufferBuilder;
         this.fixedBuffers = map;
     }
@@ -43,7 +43,7 @@ public class FontBufferSource implements MultiBufferSource {
                 }
             }
 
-            if (this.startedBuffers.add(bufferBuilder)) {
+            if (this.startedBuffers.add(bufferBuilder) && !bufferBuilder.building()) {
                 bufferBuilder.begin(renderType.mode(), renderType.format());
             }
 
@@ -54,19 +54,25 @@ public class FontBufferSource implements MultiBufferSource {
     }
 
     private BufferBuilder getBuilderRaw(RenderType renderType) {
-        return (BufferBuilder) this.fixedBuffers.getOrDefault(renderType, this.builder);
+        return this.fixedBuffers.getOrDefault(renderType, this.builder);
     }
 
     public List<Pair<RenderType, VertexBuffer>> endBatch() {
         this.lastState.ifPresent((renderTypex) -> {
             VertexConsumer vertexConsumer = this.getBuffer(renderTypex);
             if (vertexConsumer == this.builder) {
-                this.buffers.add(new Pair<>(renderTypex, this.endBatch(renderTypex)));
+                VertexBuffer buffer = this.endBatch(renderTypex);
+                if (buffer != null) {
+                    this.buffers.add(new Pair<>(renderTypex, buffer));
+                }
             }
 
         });
         for (RenderType renderType : this.fixedBuffers.keySet()) {
-            this.buffers.add(new Pair<>(renderType, this.endBatch(renderType)));
+            VertexBuffer buffer = this.endBatch(renderType);
+            if (buffer != null) {
+                this.buffers.add(new Pair<>(renderType, buffer));
+            }
         }
         return this.buffers;
     }
@@ -77,7 +83,7 @@ public class FontBufferSource implements MultiBufferSource {
         boolean bl = Objects.equals(this.lastState, renderType.asOptional());
         VertexBuffer vertexBuffer = null;
         if (bl || bufferBuilder != this.builder) {
-            if (this.startedBuffers.remove(bufferBuilder)) {
+            if (this.startedBuffers.remove(bufferBuilder) && this.builder.building()) {
                 BufferBuilder.RenderedBuffer renderedBuffer = this.builder.end();
                 renderType.setupRenderState();
                 vertexBuffer = new VertexBuffer();

@@ -6,8 +6,8 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
+import gg.capybara.mod.optimization.CachedBufferSource;
 import gg.capybara.mod.optimization.font.CharSeqHashCodeCalculator;
-import gg.capybara.mod.optimization.font.FontBufferSource;
 import gg.capybara.mod.optimization.font.FontCache;
 import kotlin.Pair;
 import net.minecraft.client.gui.Font;
@@ -53,67 +53,67 @@ public abstract class CachedFont {
     public abstract int drawInBatch(FormattedCharSequence formattedCharSequence, float f, float g, int i, boolean bl,
             Matrix4f matrix4f, MultiBufferSource multiBufferSource, Font.DisplayMode displayMode, int j, int k);
 
-    @Inject(method = "drawInternal(Ljava/lang/String;FFILorg/joml/Matrix4f;ZZ)I", at = @At("HEAD"),
-            cancellable = true)
-    private void drawCached(String text, float x, float y, int color, Matrix4f translation,
-            boolean shadow, boolean rightToLeft, CallbackInfoReturnable<Integer> cir
-    ) {
-        if (text == null) {
-            return;
-        }
-
-        Object cacheKey = new Pair<>(text, color);
-        FontCache fontCache = this.drawCache.getIfPresent(cacheKey);
-        if (fontCache == null) {
-            this.drawCache.put(cacheKey, FontCache.TooYoung.INSTANCE);
-        } else if (fontCache instanceof FontCache.TooYoung) {
-            Function<MultiBufferSource, Integer> draw = (bufferSource) ->
-                    this.drawInBatch(text, 0, 0, color, shadow, new Matrix4f(),
-                            bufferSource, Font.DisplayMode.NORMAL, 0, 0xF000F0, rightToLeft);
-            FontCache.Established established = establishCache(x, y, Long.MAX_VALUE, translation, draw);
-            this.drawCache.put(cacheKey, established);
-            cir.setReturnValue(established.getTextWidth());
-        } else if (fontCache instanceof FontCache.Established established) {
-            drawCacheEstablished(established, x, y, translation);
-            cir.setReturnValue(established.getTextWidth());
-        }
-    }
-
-    @Inject(method = "drawInternal(Lnet/minecraft/util/FormattedCharSequence;FFILorg/joml/Matrix4f;Z)I",
-            at = @At("HEAD"), cancellable = true)
-    public void drawCached(FormattedCharSequence text, float x, float y, int color, Matrix4f translation,
-            boolean shadow, CallbackInfoReturnable<Integer> cir
-    ) {
-        int cacheKey = 31 * color + CharSeqHashCodeCalculator.calculate(text);
-        FontCache fontCache = this.drawCache.getIfPresent(cacheKey);
-        if (fontCache == null) {
-            this.drawCache.put(cacheKey, FontCache.TooYoung.INSTANCE);
-        } else if (fontCache instanceof FontCache.TooYoung) {
-            long timeoutAt = isObfuscated(text) ?
-                    System.currentTimeMillis() + (1000 / OBFUSCATED_FPS)
-                    :
-                    Long.MAX_VALUE;
-            Function<MultiBufferSource, Integer> draw = (bufferSource) ->
-                    this.drawInBatch(text, 0, 0, color, shadow, new Matrix4f(),
-                            bufferSource, Font.DisplayMode.NORMAL, 0, 0xF000F0);
-            FontCache.Established established = establishCache(x, y, timeoutAt, translation, draw);
-            this.drawCache.put(cacheKey, established);
-            cir.setReturnValue(established.getTextWidth());
-        } else if (fontCache instanceof FontCache.Established established) {
-            drawCacheEstablished(established, x, y, translation);
-            cir.setReturnValue(established.getTextWidth());
-            if (established.getTimeoutAt() != Long.MAX_VALUE &&
-                    System.currentTimeMillis() >= established.getTimeoutAt()
-            ) {
-                this.drawCache.put(cacheKey, FontCache.TooYoung.INSTANCE);
-            }
-        }
-    }
+//    @Inject(method = "drawInternal(Ljava/lang/String;FFILorg/joml/Matrix4f;ZZ)I", at = @At("HEAD"),
+//            cancellable = true)
+//    private void drawCached(String text, float x, float y, int color, Matrix4f translation,
+//            boolean shadow, boolean rightToLeft, CallbackInfoReturnable<Integer> cir
+//    ) {
+//        if (text == null) {
+//            return;
+//        }
+//
+//        Object cacheKey = new Pair<>(text, color);
+//        FontCache fontCache = this.drawCache.getIfPresent(cacheKey);
+//        if (fontCache == null) {
+//            this.drawCache.put(cacheKey, FontCache.TooYoung.INSTANCE);
+//        } else if (fontCache instanceof FontCache.TooYoung) {
+//            Function<MultiBufferSource, Integer> draw = (bufferSource) ->
+//                    this.drawInBatch(text, 0, 0, color, shadow, new Matrix4f(),
+//                            bufferSource, Font.DisplayMode.NORMAL, 0, 0xF000F0, rightToLeft);
+//            FontCache.Established established = establishCache(x, y, Long.MAX_VALUE, translation, draw);
+//            this.drawCache.put(cacheKey, established);
+//            cir.setReturnValue(established.getTextWidth());
+//        } else if (fontCache instanceof FontCache.Established established) {
+//            drawCacheEstablished(established, x, y, translation);
+//            cir.setReturnValue(established.getTextWidth());
+//        }
+//    }
+//
+//    @Inject(method = "drawInternal(Lnet/minecraft/util/FormattedCharSequence;FFILorg/joml/Matrix4f;Z)I",
+//            at = @At("HEAD"), cancellable = true)
+//    public void drawCached(FormattedCharSequence text, float x, float y, int color, Matrix4f translation,
+//            boolean shadow, CallbackInfoReturnable<Integer> cir
+//    ) {
+//        int cacheKey = 31 * color + CharSeqHashCodeCalculator.calculate(text);
+//        FontCache fontCache = this.drawCache.getIfPresent(cacheKey);
+//        if (fontCache == null) {
+//            this.drawCache.put(cacheKey, FontCache.TooYoung.INSTANCE);
+//        } else if (fontCache instanceof FontCache.TooYoung) {
+//            long timeoutAt = isObfuscated(text) ?
+//                    System.currentTimeMillis() + (1000 / OBFUSCATED_FPS)
+//                    :
+//                    Long.MAX_VALUE;
+//            Function<MultiBufferSource, Integer> draw = (bufferSource) ->
+//                    this.drawInBatch(text, 0, 0, color, shadow, new Matrix4f(),
+//                            bufferSource, Font.DisplayMode.NORMAL, 0, 0xF000F0);
+//            FontCache.Established established = establishCache(x, y, timeoutAt, translation, draw);
+//            this.drawCache.put(cacheKey, established);
+//            cir.setReturnValue(established.getTextWidth());
+//        } else if (fontCache instanceof FontCache.Established established) {
+//            drawCacheEstablished(established, x, y, translation);
+//            cir.setReturnValue(established.getTextWidth());
+//            if (established.getTimeoutAt() != Long.MAX_VALUE &&
+//                    System.currentTimeMillis() >= established.getTimeoutAt()
+//            ) {
+//                this.drawCache.put(cacheKey, FontCache.TooYoung.INSTANCE);
+//            }
+//        }
+//    }
 
     private static FontCache.Established establishCache(float x, float y, long timeoutAt, Matrix4f translation,
             Function<MultiBufferSource, Integer> drawText
     ) {
-        FontBufferSource bufferSource = new FontBufferSource(Tesselator.getInstance().getBuilder(),
+        CachedBufferSource bufferSource = new CachedBufferSource(Tesselator.getInstance().getBuilder(),
                 ImmutableMap.of());
 
         Matrix4f modelViewMatrix = RenderSystem.getModelViewMatrix();
