@@ -6,9 +6,9 @@
   "mixins": [
     "blaze3d.vertex.MixinVertexBuffer",
     "optimization.network.FasterFriendlyByteBuf",
-    "optimization.network.chat.CachedStyle",
-    "optimization.world.level.block.state.LazyBlockBehaviour",
-    "optimization.world.level.block.state.LazyBlockBehaviourStateCache",
+    "optimization.renderer.CachedStyle",
+    "optimization.world.LazyBlockBehaviour",
+    "optimization.world.LazyBlockBehaviourStateCache",
     "render.CapyShaderInstance",
     "render.CapyShadersLoader"
   ],
@@ -17,9 +17,9 @@
     "MinecraftAccessor",
     "design.CleanerReceivingLevelScreen",
     "event.GuiHook",
-    "optimization.client.gui.CachedFont",
-    "optimization.client.renderer.entity.CachedEntityRenderer",
-    "optimization.multiplayer.LazyClientPacketListener",
+    "optimization.renderer.CachedFont",
+    "optimization.renderer.CachedEntityRenderer",
+    "optimization.network.LazyClientPacketListener",
     "ux.FasterReceivingLevelScreen",
     "ux.MacosKeyMappingFix",
     "ux.StealCursorInLoadingScreens"

@@ -1,4 +1,4 @@
-package gg.capybara.mod.mixin.optimization.client.renderer.entity;
+package gg.capybara.mod.mixin.optimization.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;

@@ -1,4 +1,4 @@
-package gg.capybara.mod.mixin.optimization.world.level.block.state;
+package gg.capybara.mod.mixin.optimization.world;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

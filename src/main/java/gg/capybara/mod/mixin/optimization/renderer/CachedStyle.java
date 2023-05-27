@@ -1,4 +1,4 @@
-package gg.capybara.mod.mixin.optimization.network.chat;
+package gg.capybara.mod.mixin.optimization.renderer;
 
 import net.minecraft.network.chat.Style;
 import org.spongepowered.asm.mixin.Mixin;

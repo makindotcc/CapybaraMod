@@ -1,4 +1,4 @@
-package gg.capybara.mod.mixin.optimization.multiplayer;
+package gg.capybara.mod.mixin.optimization.network;
 
 import gg.capybara.mod.CapybaraMod;
 import net.minecraft.client.Minecraft;

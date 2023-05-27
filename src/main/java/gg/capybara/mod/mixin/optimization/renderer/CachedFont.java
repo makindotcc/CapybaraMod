@@ -1,4 +1,4 @@
-package gg.capybara.mod.mixin.optimization.client.gui;
+package gg.capybara.mod.mixin.optimization.renderer;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;

@@ -1,4 +1,4 @@
-package gg.capybara.mod.mixin.optimization.world.level.block.state;
+package gg.capybara.mod.mixin.optimization.world;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.core.BlockPos;
