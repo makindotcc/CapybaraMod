@@ -101,7 +101,7 @@ object CachedLevelRenderer {
             )
             cached?.close()
             compiledEntities[entity.uuid] =
-                CachedEntity(bufferSource.endBatch(), pose, finalX, finalY, finalZ, lastUpdate = Instant.now())
+                CachedEntity(bufferSource.endBatch(), Matrix4f(pose), finalX, finalY, finalZ, lastUpdate = Instant.now())
             poseStack.popPose()
         } else {
             poseStack.pushPose()
